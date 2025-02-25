@@ -1,20 +1,27 @@
 import java.util.Stack;
 
+/**
+ * Clase para evaluar una expresión en notación postfix.
+ */
 class PostfixEvaluator {
-    
-    // Función para evaluar una expresión en notación postfix
+
+    /**
+     * Evalúa una expresión en notación postfix.
+     *
+     * @param expression la expresión postfix
+     * @return el resultado de la evaluación
+     * @throws IllegalArgumentException si la expresión es mal formada
+     * @throws ArithmeticException si ocurre un error aritmético, como división por cero
+     */
     public int evaluatePostfix(String expression) {
         Stack<Integer> stack = new Stack<>();
 
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
 
-            // Si es un número, lo convertimos a entero y lo apilamos
             if (Character.isDigit(c)) {
-                stack.push(c - '0');  // Convierte el char numérico a entero
-            }
-            // Si es un operador, sacamos dos operandos de la pila y realizamos la operación
-            else {
+                stack.push(c - '0');
+            } else {
                 if (stack.size() < 2) {
                     throw new IllegalArgumentException("Expresión postfix mal formada");
                 }
@@ -26,12 +33,11 @@ class PostfixEvaluator {
                     case '+' -> stack.push(a + b);
                     case '-' -> stack.push(a - b);
                     case '*' -> stack.push(a * b);
-                    case '/' -> { 
+                    case '/' -> {
                         if (b == 0) throw new ArithmeticException("División por cero");
                         stack.push(a / b);
                     }
                     case '^' -> stack.push((int) Math.pow(a, b));
-                    // Potencia
                     default -> throw new IllegalArgumentException("Operador desconocido: " + c);
                 }
             }
@@ -41,21 +47,19 @@ class PostfixEvaluator {
             throw new IllegalArgumentException("Expresión postfix mal formada");
         }
 
-        return stack.pop(); // El resultado final queda en la cima de la pila
+        return stack.pop();
     }
 
-    // Método de prueba
     public static void main(String[] args) {
         PostfixEvaluator evaluator = new PostfixEvaluator();
 
-        // Casos de prueba
         String[] testCases = {
-            "34+5*",    // (3+4)*5 = 35
-            "345*+",    // 3 + (4*5) = 23
-            "82/4+",    // (8/2) + 4 = 8
-            "34+2^",    // (3+4)^2 = 49
-            "92-3*",    // (9-2)*3 = 21
-            "23^"       // 2^3 = 8
+            "34+5*",
+            "345*+",
+            "82/4+",
+            "34+2^",
+            "92-3*",
+            "23^"
         };
 
         for (String expr : testCases) {
